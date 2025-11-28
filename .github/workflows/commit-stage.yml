@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - catalog-service/**
+      - .github/workflows/*.yml
 
 jobs:
   build:
