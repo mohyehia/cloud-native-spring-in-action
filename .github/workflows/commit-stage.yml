@@ -30,6 +30,7 @@ jobs:
           path: "${{ github.workspace }}"
           fail-build: false
           severity-cutoff: 'high'
+          output-file: "${{ github.workspace }}/vulnerability-report.json"
       - name:  Upload vulnerability report
         uses:  github/codeql-action/upload-sarif@v4
         if: success() || failure()
