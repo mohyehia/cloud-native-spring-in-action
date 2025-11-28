@@ -37,5 +37,5 @@ jobs:
           sarif_file: ${{ steps.scan.outputs.sarif }}
       - name:  Build, unit tests and integration tests
         run:
-          cd catalog-service
+          cd ./catalog-service
           chmod +x ./gradlew ./gradlew build
