@@ -1,6 +1,7 @@
 package com.moh.yehia.catalog.service.model;
 
 import org.assertj.core.api.Assertions;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -11,7 +12,7 @@ import java.io.IOException;
 @JsonTest
 class BookJsonTest {
     @Autowired
-    private JacksonTester<Book> bookJacksonTester;
+    private JacksonTester<@NonNull Book> bookJacksonTester;
 
     @Test
     void givenBook_whenSerialize_thenCorrect() throws IOException {
