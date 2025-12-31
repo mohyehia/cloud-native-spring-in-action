@@ -31,7 +31,7 @@ class BookControllerTest {
 
     @Test
     void givenBook_whenGetBookByIdSent_thenBookIsReturned() throws Exception {
-        var book = new Book("1234567890", "Title", "Author", 9.90);
+        var book = new Book(1, "1234567890", "Title", "Author", 9.90, 1);
         BDDMockito.given(bookService.findByIsbn(ArgumentMatchers.anyString()))
                 .willReturn(book);
         mockMvc.perform(MockMvcRequestBuilders.get("/books/1234567890"))

@@ -1,6 +1,14 @@
 spring:
   application:
     name: catalog-service
+
+  datasource:
+    username: postgres
+    password: password
+    url: jdbc:postgresql://localhost:5432/catalog_service
+    hikari:
+      connection-timeout: 2000
+      maximum-pool-size: 5
 server:
   port: 9090
   tomcat:
