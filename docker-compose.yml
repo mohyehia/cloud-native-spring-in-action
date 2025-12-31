@@ -1,0 +1,13 @@
+services:
+  postgres-db:
+    container_name: postgres-ctr
+    image: postgres:18.1
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./docker/volumes/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: catalog_service
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_DB: catalog_service

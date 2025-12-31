@@ -23,14 +23,14 @@ class BookValidationTest {
 
     @Test
     void whenAllFieldsCorrect_thenValidationSucceeds() {
-        var book = new Book(0, "1234567890", "Title", "Author", 9.90, 0);
+        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
         Set<ConstraintViolation<Book>> constraintViolations = validator.validate(book);
         Assertions.assertThat(constraintViolations).isEmpty();
     }
 
     @Test
     void whenFieldsAreMissing_thenValidationFails() {
-        var book = new Book(0, null, "", "", 0.0, 0);
+        var book = new Book(null, null, "", "", 0.0, null, null, 0);
         Set<ConstraintViolation<Book>> constraintViolations = validator.validate(book);
         Assertions.assertThat(constraintViolations).isNotEmpty()
                 .hasSize(4);

@@ -4,12 +4,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
+
+import java.time.Instant;
 
 public record Book(
         @Id
-        long id,
+        Long id,
         @NotBlank(message = "The ISBN is required")
         @Pattern(regexp = "^(\\d{10}|\\d{13})$", message = "The ISBN must be 10 or 13 digits long")
         String isbn,
@@ -17,6 +21,10 @@ public record Book(
         @NotBlank(message = "The book author is required") String author,
         @NotNull(message = "The book price is required")
         @Positive(message = "The book price must be greater than zero") Double price,
+        @CreatedDate
+        Instant createdDate,
+        @LastModifiedDate
+        Instant lastModifiedDate,
         @Version
         int version) {
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 
 import java.io.IOException;
+import java.time.Instant;
 
 @JsonTest
 class BookJsonTest {
@@ -16,9 +17,9 @@ class BookJsonTest {
 
     @Test
     void givenBook_whenSerialize_thenCorrect() throws IOException {
-        var book = new Book(1, "1234567890", "Title", "Author", 9.90, 1);
+        var book = new Book(null, "1234567890", "Title", "Author", 9.90, Instant.now(), Instant.now(), 1);
         var jsonContent = bookJacksonTester.write(book);
-        Assertions.assertThat(jsonContent).extractingJsonPathNumberValue("@.id").isEqualTo((int) book.id());
+        Assertions.assertThat(jsonContent).extractingJsonPathNumberValue("@.id").isEqualTo(book.id());
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.isbn").isEqualTo(book.isbn());
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.title").isEqualTo(book.title());
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.author").isEqualTo(book.author());
@@ -29,7 +30,7 @@ class BookJsonTest {
     @Test
     void givenJsonContent_whenDeserialize_thenCorrect() throws IOException {
         var jsonContent = """
-                {   "id": 0,
+                {   "id": null,
                     "isbn": "1234567890",
                     "title": "Title",
                     "author": "Author",
@@ -39,6 +40,6 @@ class BookJsonTest {
                 """;
         Assertions.assertThat(bookJacksonTester.parse(jsonContent))
                 .usingRecursiveComparison()
-                .isEqualTo(new Book(0, "1234567890", "Title", "Author", 9.90, 0));
+                .isEqualTo(new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0));
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.Instant;
+
 @WebMvcTest(BookController.class)
 class BookControllerTest {
     @Autowired
@@ -31,7 +33,7 @@ class BookControllerTest {
 
     @Test
     void givenBook_whenGetBookByIdSent_thenBookIsReturned() throws Exception {
-        var book = new Book(1, "1234567890", "Title", "Author", 9.90, 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, Instant.now(), null, 1);
         BDDMockito.given(bookService.findByIsbn(ArgumentMatchers.anyString()))
                 .willReturn(book);
         mockMvc.perform(MockMvcRequestBuilders.get("/books/1234567890"))
