@@ -29,14 +29,23 @@ class BookValidationTest {
     }
 
     @Test
+    void givenInvalidIsbnPattern_whenValidateBook_thenValidationFails() {
+        var book = new Book(null, "00123456", "Spring Boot 3", "author", 55.0, null, null, 0);
+        Set<ConstraintViolation<Book>> constraintViolations = validator.validate(book);
+        Assertions.assertThat(constraintViolations).isNotEmpty()
+                .hasSize(1);
+        Assertions.assertThat(constraintViolations.iterator().next().getMessage())
+                .isNotEmpty()
+                .isEqualTo("The ISBN must be 10 or 13 digits long");
+    }
+
+    @Test
     void whenFieldsAreMissing_thenValidationFails() {
         var book = new Book(null, null, "", "", 0.0, null, null, 0);
         Set<ConstraintViolation<Book>> constraintViolations = validator.validate(book);
         Assertions.assertThat(constraintViolations).isNotEmpty()
                 .hasSize(4);
-        constraintViolations.forEach(constraintViolation -> {
-            Assertions.assertThat(constraintViolation.getMessage()).isNotEmpty();
-        });
+        constraintViolations.forEach(constraintViolation -> Assertions.assertThat(constraintViolation.getMessage()).isNotEmpty());
     }
 
 }

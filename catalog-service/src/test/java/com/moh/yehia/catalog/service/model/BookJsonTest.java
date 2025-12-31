@@ -25,6 +25,8 @@ class BookJsonTest {
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.author").isEqualTo(book.author());
         Assertions.assertThat(jsonContent).extractingJsonPathNumberValue("@.price").isEqualTo(book.price());
         Assertions.assertThat(jsonContent).extractingJsonPathNumberValue("@.version").isEqualTo(book.version());
+        Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.createdDate").isEqualTo(book.createdDate().toString());
+        Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.lastModifiedDate").isEqualTo(book.lastModifiedDate().toString());
     }
 
     @Test
