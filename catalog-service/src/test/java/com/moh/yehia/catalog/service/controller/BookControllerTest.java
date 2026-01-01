@@ -113,7 +113,7 @@ class BookControllerTest {
     }
 
     @Test
-    void givenBook_whenGetBookByIdSent_thenBookIsReturned() throws Exception {
+    void givenBook_whenGetBookByIsbn_thenBookIsReturned() throws Exception {
         // given
         var book = new Book(1L, "1234567890", "Title", "Author", 9.90, Instant.now(), Instant.now(), 1);
 
@@ -135,7 +135,7 @@ class BookControllerTest {
     }
 
     @Test
-    void givenNotFoundBook_whenGetBookByIdSent_thenExceptionIsReturned() throws Exception {
+    void givenNotFoundBook_whenGetBookByIsbn_thenExceptionIsReturned() throws Exception {
         // when
         BDDMockito.given(bookService.findByIsbn(ArgumentMatchers.anyString()))
                 .willThrow(BookNotFoundException.class);
