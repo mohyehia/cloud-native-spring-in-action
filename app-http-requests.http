@@ -1,0 +1,21 @@
+### get all books
+GET http://localhost:9091/books
+
+
+
+### create new book
+POST http://localhost:9091/books
+Content-Type: application/json
+
+{
+  "isbn": "0098765432",
+  "title": "Spring Boot 3",
+  "author": "Mohammed Yehia",
+  "price": 55,
+  "version": 0
+}
+
+
+### find book by isbn
+GET http://localhost:9091/books/0098765432
+Content-Type: application/json
