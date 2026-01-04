@@ -4,6 +4,7 @@ import com.moh.yehia.catalog.service.config.BasePostgresqlContainer;
 import com.moh.yehia.catalog.service.config.DataConfig;
 import com.moh.yehia.catalog.service.model.Book;
 import org.assertj.core.api.Assertions;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
 
     @Test
     void givenBook_whenSaveBook_thenReturnSavedBook() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
         Assertions.assertThat(savedBook)
                 .isNotNull();
@@ -45,7 +46,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
 
     @Test
     void givenBooks_whenFindAll_thenReturnListOfBooks() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         bookRepository.save(book);
         var books = bookRepository.findAll();
         Assertions.assertThat(books).isNotNull().isNotEmpty().hasSize(1);
@@ -53,7 +54,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
 
     @Test
     void givenBook_whenFindByIsbn_thenReturnBook() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         bookRepository.save(book);
         var foundBook = bookRepository.findByIsbn(book.isbn());
         Assertions.assertThat(foundBook).isPresent();
@@ -68,7 +69,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
 
     @Test
     void givenBook_whenExistsByIsbn_thenReturnBook() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         bookRepository.save(book);
         var exists = bookRepository.existsByIsbn(book.isbn());
         Assertions.assertThat(exists).isTrue();
@@ -82,12 +83,16 @@ class BookRepositoryTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenDeleteByIsbn_thenBookIsDeleted() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
         Assertions.assertThat(savedBook).isNotNull();
 
         bookRepository.deleteByIsbn(book.isbn());
         var exists = bookRepository.existsByIsbn(book.isbn());
         Assertions.assertThat(exists).isFalse();
+    }
+
+    private @NotNull Book getDefaultBook() {
+        return new Book(null, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
     }
 }

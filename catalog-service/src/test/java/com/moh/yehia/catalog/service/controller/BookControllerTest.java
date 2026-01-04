@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tools.jackson.databind.ObjectMapper;
 
-import java.time.Instant;
 import java.util.List;
 
 @WebMvcTest(BookController.class)
@@ -35,7 +34,7 @@ class BookControllerTest {
     @Test
     void givenListOfBooks_whenGetAllBooks_thenBooksAreReturned() throws Exception {
         // given
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, Instant.now(), null, 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
 
         //when
         BDDMockito.given(bookService.findBooks())
@@ -61,8 +60,8 @@ class BookControllerTest {
     @Test
     void givenValidBook_whenAddBook_thenBookIsCreated() throws Exception {
         // given
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, Instant.now(), null, 1);
-        var savedBook = new Book(1L, "1234567890", "Title", "Author", 9.90, Instant.now(), Instant.now(), 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
+        var savedBook = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
 
         // when
         BDDMockito.given(bookService.addBook(ArgumentMatchers.any(Book.class))).willReturn(savedBook);
@@ -92,7 +91,7 @@ class BookControllerTest {
     @Test
     void givenBook_whenUpdateBook_thenUpdatedBookIsReturned() throws Exception {
         // given
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, Instant.now(), Instant.now(), 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
 
         // when
         BDDMockito.given(bookService.updateBook(ArgumentMatchers.eq("1234567890"), ArgumentMatchers.any(Book.class))).willReturn(book);
@@ -115,7 +114,7 @@ class BookControllerTest {
     @Test
     void givenBook_whenGetBookByIsbn_thenBookIsReturned() throws Exception {
         // given
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, Instant.now(), Instant.now(), 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
 
         // when
         BDDMockito.given(bookService.findByIsbn(ArgumentMatchers.anyString()))

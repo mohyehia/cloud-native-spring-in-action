@@ -21,6 +21,7 @@ public record Book(
         @NotBlank(message = "The book author is required") String author,
         @NotNull(message = "The book price is required")
         @Positive(message = "The book price must be greater than zero") Double price,
+        String publisher,
         @CreatedDate
         Instant createdDate,
         @LastModifiedDate

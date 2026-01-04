@@ -7,6 +7,7 @@ import com.moh.yehia.catalog.service.exception.BookNotFoundException;
 import com.moh.yehia.catalog.service.model.Book;
 import com.moh.yehia.catalog.service.repository.BookRepository;
 import org.assertj.core.api.Assertions;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ class BookServiceTest extends BasePostgresqlContainer {
 
     @Test
     void givenListOfBooks_whenFindBooks_thenBooksAreReturned() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         bookRepository.save(book);
 
         var books = bookService.findBooks();
@@ -57,7 +58,7 @@ class BookServiceTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenFindByIsbn_thenBookIsReturned() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
 
         Book retrievedBook = bookService.findByIsbn(book.isbn());
@@ -75,7 +76,7 @@ class BookServiceTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenAddBook_thenBookAlreadyExistsExceptionIsThrown() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         bookService.addBook(book);
 
         Assertions.assertThatThrownBy(() -> bookService.addBook(book))
@@ -85,7 +86,7 @@ class BookServiceTest extends BasePostgresqlContainer {
 
     @Test
     void givenNewBook_whenAddBook_thenBookIsCreated() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookService.addBook(book);
         Assertions.assertThat(savedBook)
                 .isNotNull()
@@ -102,7 +103,7 @@ class BookServiceTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenDeleteBook_thenBookIsDeleted() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         bookService.addBook(book);
 
         bookService.deleteBook(book.isbn());
@@ -112,7 +113,7 @@ class BookServiceTest extends BasePostgresqlContainer {
 
     @Test
     void givenNonExistingBook_whenUpdateBook_thenNewBookIsAdded() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookService.updateBook(book.isbn(), book);
         Assertions.assertThat(savedBook)
                 .isNotNull()
@@ -129,10 +130,10 @@ class BookServiceTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenUpdateBook_thenBookIsUpdated() {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookService.addBook(book);
 
-        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.version());
+        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.publisher(), savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.version());
         Book retrievedBook = bookService.updateBook(book.isbn(), updatedBook);
 
         Assertions.assertThat(retrievedBook)
@@ -144,5 +145,9 @@ class BookServiceTest extends BasePostgresqlContainer {
 
         Assertions.assertThat(retrievedBook.lastModifiedDate()).isAfter(savedBook.lastModifiedDate());
         Assertions.assertThat(retrievedBook.version()).isGreaterThan(savedBook.version());
+    }
+
+    private @NotNull Book getDefaultBook() {
+        return new Book(null, "1234567890", "Title", "Author", 9.90, "publisher", null, null, 0);
     }
 }

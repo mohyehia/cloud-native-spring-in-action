@@ -5,6 +5,7 @@ import com.moh.yehia.catalog.service.config.DataConfig;
 import com.moh.yehia.catalog.service.model.Book;
 import com.moh.yehia.catalog.service.repository.BookRepository;
 import org.assertj.core.api.Assertions;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
 
     @Test
     void givenListOfBooks_whenGetAllBooks_thenBooksAreReturned() throws Exception {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         bookRepository.save(book);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/books"))
@@ -68,7 +69,7 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
 
     @Test
     void givenValidBook_whenAddBook_thenBookIsCreated() throws Exception {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/books")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -90,7 +91,7 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenDeleteBook_thenBookIsDeleted() throws Exception {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/books/{isbn}", savedBook.isbn()))
@@ -103,10 +104,10 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenUpdateBook_thenUpdatedBookIsReturned() throws Exception {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
 
-        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.version());
+        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.publisher(), savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.version());
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/books/{isbn}", savedBook.isbn())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -130,7 +131,7 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
 
     @Test
     void givenExistingBook_whenGetByIsbn_thenBookIsReturned() throws Exception {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, null, null, 0);
+        var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/books/{isbn}", book.isbn()))
@@ -162,5 +163,9 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
         Assertions.assertThat(contentAsString)
                 .isNotNull()
                 .isEqualTo("The book with ISBN " + isbn + " was not found.");
+    }
+
+    private @NotNull Book getDefaultBook() {
+        return new Book(null, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
     }
 }
