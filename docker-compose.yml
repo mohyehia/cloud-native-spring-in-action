@@ -1,4 +1,15 @@
 services:
+  catalog-service:
+    depends_on:
+      - postgres-db
+    container_name: catalog-service
+    image: catalog-service
+    ports:
+      - '9091:9091'
+    environment:
+      BPL_JVM_THREAD_COUNT: 50
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/catalog_service
+
   postgres-db:
     container_name: postgres-ctr
     image: postgres:18.1
