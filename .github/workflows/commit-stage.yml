@@ -72,4 +72,4 @@ jobs:
           cd catalog-service
           chmod +x ./gradlew
           ./gradlew bootJar
-          docker build -t ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{env.VERSION}} catalog-service/.
+          docker build -t ${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{env.VERSION}} .
