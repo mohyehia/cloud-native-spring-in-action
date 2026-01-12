@@ -40,6 +40,10 @@ spec:
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://postgres-db:5432/catalog_service
+            - name: SPRING_DATASOURCE_USERNAME
+              value: catalog_service
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: P@ssw0rd
             - name: BPL_JVM_THREAD_COUNT
               value: "50"
             - name: SERVER_SHUTDOWN
