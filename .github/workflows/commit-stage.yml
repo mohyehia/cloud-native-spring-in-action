@@ -47,13 +47,13 @@ jobs:
           cd catalog-service
           chmod +x ./gradlew
           ./gradlew build
-      - name: Validate Kubernetes manifests
+      - name: Install Validators
         uses: alexellis/arkade-get@master
         with:
           kubectl: latest
           kubeval: 0.16.1
-          run: |
-            kubeval --strict -d k8s
+      - name: Validate Manifests
+        run: kubeval --strict -d k8s
   package:
     name: Package and Publish
     if: ${{github.ref == 'refs/heads/main'}}
