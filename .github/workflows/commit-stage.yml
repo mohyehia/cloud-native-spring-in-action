@@ -51,7 +51,7 @@ jobs:
         uses: azure/k8s-lint@v3
         with:
           manifests: |
-            k8s/catalog-service.yml
+            catalog-service/k8s/catalog-service.yml
           kubeconformOpts: -summary
   package:
     name: Package and Publish
