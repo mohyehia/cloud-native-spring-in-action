@@ -48,7 +48,7 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build
       - name: Validate Kubernetes manifests
-      - uses: azure/setup-kubectl@v4
+        uses: azure/setup-kubectl@v4
       - uses: azure/k8s-lint@v3
         with:
           lintType: dryrun
