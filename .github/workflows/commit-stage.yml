@@ -48,12 +48,11 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build
       - name: Validate Kubernetes manifests
-        uses: azure/setup-kubectl@v4
-      - uses: azure/k8s-lint@v3
+        uses: azure/k8s-lint@v3
         with:
-          lintType: dryrun
           manifests: |
             catalog-service/k8s/catalog-service.yml
+          kubeconformOpts: -summary
   package:
     name: Package and Publish
     if: ${{github.ref == 'refs/heads/main'}}
