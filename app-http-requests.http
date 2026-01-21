@@ -19,3 +19,8 @@ Content-Type: application/json
 ### find book by isbn
 GET http://localhost:9091/books/0098765432
 Content-Type: application/json
+
+
+### get orders
+GET http://localhost:9092/orders
+Content-Type: application/json
