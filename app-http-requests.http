@@ -24,3 +24,13 @@ Content-Type: application/json
 ### get orders
 GET http://localhost:9092/orders
 Content-Type: application/json
+
+
+### create new order
+POST http://localhost:9092/orders
+Content-Type: application/json
+
+{
+    "isbn": "00987654987",
+    "quantity": 3
+}

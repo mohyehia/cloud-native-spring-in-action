@@ -22,3 +22,12 @@ services:
       POSTGRES_USER: catalog_service
       POSTGRES_PASSWORD: P@ssw0rd
       POSTGRES_DB: catalog_service
+
+  mongo-db:
+    container_name: mongo-ctr
+    image: mongo:4.4.29-focal
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./docker/volumes/mongo:/data/db
