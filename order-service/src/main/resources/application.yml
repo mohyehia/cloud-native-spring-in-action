@@ -15,3 +15,8 @@ server:
     threads:
       max: 50
       min-spare: 5
+
+catalog-service:
+  url: http://localhost:9091/books
+  connection-timeout: 2
+  read-timeout: 3

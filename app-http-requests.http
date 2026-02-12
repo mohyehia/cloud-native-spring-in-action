@@ -2,7 +2,6 @@
 GET http://localhost:9091/books
 
 
-
 ### create new book
 POST http://localhost:9091/books
 Content-Type: application/json
@@ -31,6 +30,6 @@ POST http://localhost:9092/orders
 Content-Type: application/json
 
 {
-    "isbn": "00987654987",
-    "quantity": 3
+    "isbn": "0098765432",
+    "quantity": 1
 }
