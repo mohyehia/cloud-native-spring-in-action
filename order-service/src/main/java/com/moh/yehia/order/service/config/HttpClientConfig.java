@@ -1,5 +1,6 @@
 package com.moh.yehia.order.service.config;
 
+import com.moh.yehia.order.service.client.CatalogServiceClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

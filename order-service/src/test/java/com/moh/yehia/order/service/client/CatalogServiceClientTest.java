@@ -1,4 +1,4 @@
-package com.moh.yehia.order.service.config;
+package com.moh.yehia.order.service.client;
 
 import com.moh.yehia.order.service.constant.TestConstants;
 import okhttp3.mockwebserver.MockResponse;

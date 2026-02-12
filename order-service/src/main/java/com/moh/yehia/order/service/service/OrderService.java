@@ -1,6 +1,6 @@
 package com.moh.yehia.order.service.service;
 
-import com.moh.yehia.order.service.config.CatalogServiceClient;
+import com.moh.yehia.order.service.client.CatalogServiceClient;
 import com.moh.yehia.order.service.model.Book;
 import com.moh.yehia.order.service.model.Order;
 import com.moh.yehia.order.service.model.OrderStatus;
