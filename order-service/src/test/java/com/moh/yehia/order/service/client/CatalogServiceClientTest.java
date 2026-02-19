@@ -26,7 +26,7 @@ class CatalogServiceClientTest {
     @BeforeEach
     void setup() throws IOException {
         mockWebServer = new MockWebServer();
-        mockWebServer.start();
+        mockWebServer.start(9091);
 
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
         simpleClientHttpRequestFactory.setConnectTimeout(Duration.ofSeconds(1));

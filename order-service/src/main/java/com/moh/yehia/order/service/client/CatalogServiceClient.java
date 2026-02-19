@@ -12,7 +12,7 @@ import org.springframework.web.service.annotation.HttpExchange;
 public interface CatalogServiceClient {
 
     @ConcurrencyLimit(10)
-    @Retryable(excludes = {HttpClientErrorException.BadRequest.class}, maxRetries = 3, multiplier = 2)
+    @Retryable(excludes = {HttpClientErrorException.BadRequest.class, HttpClientErrorException.NotFound.class}, maxRetries = 3, multiplier = 2)
     @GetExchange("/{isbn}")
     Book getBookByIsbn(@PathVariable String isbn);
 }
