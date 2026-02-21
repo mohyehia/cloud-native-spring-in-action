@@ -33,3 +33,36 @@ Content-Type: application/json
     "isbn": "0098765432",
     "quantity": 1
 }
+
+
+### API Gateway
+### get all books through API Gateway
+GET http://localhost:9000/books
+
+### get book by isbn through API Gateway
+GET http://localhost:9000/books/0098765987
+
+### create new book through API Gateway
+POST http://localhost:9091/books
+Content-Type: application/json
+
+{
+  "isbn": "0098765987",
+  "title": "Database Internals",
+  "author": "Mohammed",
+  "price": 88,
+  "version": 0
+}
+
+### get orders through API Gateway
+GET http://localhost:9000/orders
+Content-Type: application/json
+
+### create new order through API Gateway
+POST http://localhost:9000/orders
+Content-Type: application/json
+
+{
+  "isbn": "0098765987",
+  "quantity": 1
+}
