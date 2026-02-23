@@ -10,10 +10,20 @@ spring:
               uri: ${CATALOG_SERVICE_URL:http://localhost:9091}/books
               predicates:
                 - Path=/books/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: catalogCircuitBreaker
+                    fallbackUri: forward:/catalog-fallback
             - id: order-service
               uri: ${ORDER_SERVICE_URL:http://localhost:9092}/orders
               predicates:
                 - Path=/orders/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: orderCircuitBreaker
+                    fallbackUri: forward:/order-fallback
           httpclient:
             connect-timeout: 2000
             response-timeout: 5s
@@ -41,3 +51,28 @@ server:
   netty:
     connection-timeout: 2s
     idle-timeout: 15s
+
+resilience4j:
+  circuitbreaker:
+    configs:
+        default:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            minimumNumberOfCalls: 5
+            failureRateThreshold: 50
+            waitDurationInOpenState: 15s
+            permittedNumberOfCallsInHalfOpenState: 3
+    instances:
+      catalogCircuitBreaker:
+        baseConfig: default
+      orderCircuitBreaker:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeout-duration:
+          seconds: 5
+
+logging:
+  level:
+    io.github.resilience4j: DEBUG

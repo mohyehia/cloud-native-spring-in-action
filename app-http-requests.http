@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 
-### API Gateway
+
 ### get all books through API Gateway
 GET http://localhost:9000/books
 
@@ -43,7 +43,7 @@ GET http://localhost:9000/books
 GET http://localhost:9000/books/0098765987
 
 ### create new book through API Gateway
-POST http://localhost:9091/books
+POST http://localhost:9000/books
 Content-Type: application/json
 
 {
