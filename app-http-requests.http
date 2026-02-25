@@ -40,17 +40,17 @@ Content-Type: application/json
 GET http://localhost:9000/books
 
 ### get book by isbn through API Gateway
-GET http://localhost:9000/books/0098765987
+GET http://localhost:9000/books/0098765777
 
 ### create new book through API Gateway
 POST http://localhost:9000/books
 Content-Type: application/json
 
 {
-  "isbn": "0098765987",
-  "title": "Database Internals",
-  "author": "Mohammed",
-  "price": 88,
+  "isbn": "0098765777",
+  "title": "Cloud Native Java",
+  "author": "Thomas",
+  "price": 121,
   "version": 0
 }
 
@@ -63,6 +63,6 @@ POST http://localhost:9000/orders
 Content-Type: application/json
 
 {
-  "isbn": "0098765987",
-  "quantity": 1
+  "isbn": "0098765777",
+  "quantity": 3
 }
