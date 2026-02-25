@@ -1,6 +1,11 @@
 spring:
   application:
     name: api-gateway
+  session:
+    data:
+      redis:
+        namespace: spring:session
+    timeout: 10m
   cloud:
     gateway:
       server:
@@ -45,6 +50,21 @@ spring:
                   max-backoff: 500ms
                   factor: 2
                   basedOnPreviousValue: false
+            - name: SaveSession # instruct Spring Cloud Gateway to always save the web session before forwarding requests downstream.
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter:
+                  replenishRate: 10 # number of tokens to add in the bucket each second
+                  burstCapacity: 20 # maximum number of tokens in the bucket
+                  requestedTokens: 1 # number of tokens required for each request
+          redis-rate-limiter:
+            include-headers: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      connect-timeout: 2s
+      timeout: 1s
 
 server:
   port: 9000
@@ -55,13 +75,13 @@ server:
 resilience4j:
   circuitbreaker:
     configs:
-        default:
-            registerHealthIndicator: true
-            slidingWindowSize: 10
-            minimumNumberOfCalls: 5
-            failureRateThreshold: 50
-            waitDurationInOpenState: 15s
-            permittedNumberOfCallsInHalfOpenState: 3
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15s
+        permittedNumberOfCallsInHalfOpenState: 3
     instances:
       catalogCircuitBreaker:
         baseConfig: default

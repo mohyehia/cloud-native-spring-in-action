@@ -2,6 +2,7 @@ package com.moh.yehia.apigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -29,5 +30,13 @@ class FallbackEndpoints{
                 .GET("/order-fallback", request -> ServerResponse.ok().body(Mono.just("catalog-service is not available at this moment!"), String.class))
                 .POST("/order-fallback", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE).build())
                 .build();
+    }
+}
+
+@Configuration
+class RateLimiterConfig{
+    @Bean
+    public KeyResolver keyResolver() {
+        return exchange -> Mono.just("anonymous");
     }
 }
