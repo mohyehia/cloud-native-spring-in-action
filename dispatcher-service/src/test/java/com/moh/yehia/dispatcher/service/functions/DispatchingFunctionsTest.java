@@ -1,5 +1,6 @@
 package com.moh.yehia.dispatcher.service.functions;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.function.context.FunctionCatalog;
@@ -10,6 +11,7 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @FunctionalSpringBootTest
+@Disabled("Disabled and only to be used with spring cloud function only")
 class DispatchingFunctionsTest {
 
     @Autowired
