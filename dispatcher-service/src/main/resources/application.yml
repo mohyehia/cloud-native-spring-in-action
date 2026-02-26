@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: dispatcher-service
+
+  cloud:
+    function:
+      definition: pack|label # this property lets you declare which functions you want Spring Cloud Function to manage and integrate, resulting in a specific data flow.
+
+server:
+  port: 9003
