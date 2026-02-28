@@ -3,6 +3,7 @@ package com.moh.yehia.order.service.service;
 import com.moh.yehia.order.service.config.BaseMongoContainer;
 import com.moh.yehia.order.service.config.DataConfig;
 import com.moh.yehia.order.service.constant.TestConstants;
+import com.moh.yehia.order.service.event.OrderAcceptedMessage;
 import com.moh.yehia.order.service.model.Order;
 import com.moh.yehia.order.service.model.OrderStatus;
 import com.moh.yehia.order.service.repository.OrderRepository;
@@ -14,13 +15,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.stream.binder.test.OutputDestination;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
-@Import(DataConfig.class)
+@Import({DataConfig.class, TestChannelBinderConfiguration.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class OrderServiceTest extends BaseMongoContainer {
     @Autowired
@@ -31,10 +35,17 @@ class OrderServiceTest extends BaseMongoContainer {
 
     private static MockWebServer mockWebServer;
 
+    @Autowired
+    private OutputDestination outputDestination;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     void setup() throws Exception {
         mockWebServer = new MockWebServer();
         mockWebServer.start(9091);
+        orderRepository.deleteAll();
     }
 
     @AfterEach
@@ -81,6 +92,10 @@ class OrderServiceTest extends BaseMongoContainer {
                 .first()
                 .extracting("bookIsbn", "bookName", "bookPrice", "quantity", "status")
                 .containsExactly(bookIsbn, "Test Book", 19.99, 2, OrderStatus.ACCEPTED);
+
+        String orderId = orders.getFirst().id();
+        Assertions.assertThat(objectMapper.readValue(outputDestination.receive().getPayload(), OrderAcceptedMessage.class))
+                .isEqualTo(new OrderAcceptedMessage(orderId));
     }
 
     @Test

@@ -7,6 +7,31 @@ spring:
     username: order_service
     password: P@ssw0rd
 
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST:localhost}
+    port: ${RABBIT_MQ_PORT:5672}
+    username: ${RABBIT_MQ_USERNAME:user}
+    password: ${RABBIT_MQ_PASSWORD:password}
+    connection-timeout: 5s
+
+  cloud:
+    function:
+      definition: dispatchOrder
+    stream:
+      bindings:
+        dispatchOrder-in-0:
+          destination: order-dispatched
+          group: ${spring.application.name}
+          content-type: application/json
+        acceptOrder-out-0:
+          destination: order-accepted
+          content-type: application/json
+      rabbit:
+        bindings:
+            dispatchOrder-in-0:
+                producer:
+                  transacted: true
+
 server:
   port: 9092
   tomcat:

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,7 +31,7 @@ import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@Import(DataConfig.class)
+@Import({DataConfig.class, TestChannelBinderConfiguration.class})
 class OrderControllerTest extends BaseMongoContainer {
     @Autowired
     private MockMvc mockMvc;
@@ -47,6 +48,7 @@ class OrderControllerTest extends BaseMongoContainer {
     void setup() throws Exception {
         mockWebServer = new MockWebServer();
         mockWebServer.start(9091);
+        orderRepository.deleteAll();
     }
 
     @Test

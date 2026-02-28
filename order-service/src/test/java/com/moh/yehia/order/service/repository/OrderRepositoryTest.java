@@ -4,7 +4,7 @@ import com.moh.yehia.order.service.config.BaseMongoContainer;
 import com.moh.yehia.order.service.config.DataConfig;
 import com.moh.yehia.order.service.model.Order;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
@@ -16,8 +16,8 @@ class OrderRepositoryTest extends BaseMongoContainer {
     @Autowired
     private OrderRepository orderRepository;
 
-    @AfterEach
-    void cleanUp() {
+    @BeforeEach
+    void setUp() {
         orderRepository.deleteAll();
     }
 

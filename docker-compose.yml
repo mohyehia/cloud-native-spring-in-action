@@ -79,3 +79,13 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
+
+#  product-service:
+#    container_name: product-service
+#    build:
+#      context: ../product-service/.
+#    environment:
+#      RABBIT_MQ_HOST: ${RABBIT_MQ_HOST}
+#      RABBIT_MQ_PORT: ${RABBIT_MQ_PORT}
+#      RABBIT_MQ_USERNAME: ${RABBIT_MQ_USERNAME}
+#      RABBIT_MQ_PASSWORD: ${RABBIT_MQ_PASSWORD}
