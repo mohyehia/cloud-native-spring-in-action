@@ -11,6 +11,8 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
+
 @SpringBootApplication
 public class ApiGatewayApplication {
 
@@ -21,22 +23,24 @@ public class ApiGatewayApplication {
 }
 
 @Configuration
-class FallbackEndpoints{
+class FallbackEndpoints {
     @Bean
     public RouterFunction<ServerResponse> routerFunction() {
         return RouterFunctions.route()
                 .GET("/catalog-fallback", request -> ServerResponse.ok().body(Mono.just("catalog-service is not available at this moment!"), String.class))
                 .POST("/catalog-fallback", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE).build())
-                .GET("/order-fallback", request -> ServerResponse.ok().body(Mono.just("catalog-service is not available at this moment!"), String.class))
+                .GET("/order-fallback", request -> ServerResponse.ok().body(Mono.just("order-service is not available at this moment!"), String.class))
                 .POST("/order-fallback", request -> ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE).build())
                 .build();
     }
 }
 
 @Configuration
-class RateLimiterConfig{
+class RateLimiterConfig {
     @Bean
     public KeyResolver keyResolver() {
-        return exchange -> Mono.just("anonymous");
+        return exchange -> exchange.getPrincipal()
+                .map(Principal::getName)
+                .defaultIfEmpty("anonymous");
     }
 }

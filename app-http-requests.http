@@ -31,7 +31,7 @@ Content-Type: application/json
 
 {
     "isbn": "0098765432",
-    "quantity": 1
+    "quantity": 2
 }
 
 

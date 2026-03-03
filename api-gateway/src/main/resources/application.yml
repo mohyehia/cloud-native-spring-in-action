@@ -29,6 +29,10 @@ spring:
                   args:
                     name: orderCircuitBreaker
                     fallbackUri: forward:/order-fallback
+            - id: spa-route
+              uri: ${SPA_URL:http://localhost:9004}
+              predicates:
+                - Path=/,/*.css,/*.js,/favicon.ico
           httpclient:
             connect-timeout: 2000
             response-timeout: 5s
@@ -66,8 +70,24 @@ spring:
       connect-timeout: 2s
       timeout: 1s
 
+  security:
+    oauth2:
+      client:
+        registration:
+            keycloak:
+                client-id: api-gateway
+                client-secret: ${KEYCLOAK_CLIENT_SECRET:ITW6FxSOoabDc5ZCxbOPAfOKaeZm8UG1}
+                authorization-grant-type: authorization_code
+                scope:
+                  - openid
+                  - profile
+        provider:
+            keycloak:
+                issuer-uri: http://localhost:8180/realms/workshop
+
+
 server:
-  port: 9000
+  port: 9001
   netty:
     connection-timeout: 2s
     idle-timeout: 15s
