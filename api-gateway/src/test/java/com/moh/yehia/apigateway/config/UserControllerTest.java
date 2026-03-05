@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers;
@@ -13,7 +12,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebFluxTest(UserController.class)
 @Import(SecurityConfig.class)
@@ -56,8 +54,7 @@ class UserControllerTest {
                         token -> token.claim(StandardClaimNames.PREFERRED_USERNAME, user.username())
                                 .claim(StandardClaimNames.GIVEN_NAME, user.firstName())
                                 .claim(StandardClaimNames.FAMILY_NAME, user.lastName())
-                ).authorities(user.roles().stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList()));
+                                .claim("roles", user.roles())
+                );
     }
 }

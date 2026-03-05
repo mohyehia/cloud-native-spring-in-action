@@ -55,6 +55,7 @@ spring:
                   factor: 2
                   basedOnPreviousValue: false
             - name: SaveSession # instruct Spring Cloud Gateway to always save the web session before forwarding requests downstream.
+            - name: TokenRelay # propagate the OAuth2 access token from the incoming request to downstream services.
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter:
@@ -81,6 +82,7 @@ spring:
                 scope:
                   - openid
                   - profile
+                  - roles
         provider:
             keycloak:
                 issuer-uri: http://localhost:8180/realms/workshop
@@ -115,4 +117,8 @@ resilience4j:
 
 logging:
   level:
+    root: info
+    org.springframework.cloud.gateway: trace
+    org.springframework.security: trace
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: info
     io.github.resilience4j: DEBUG

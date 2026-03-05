@@ -1,6 +1,5 @@
 package com.moh.yehia.apigateway.config;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
@@ -18,11 +17,11 @@ public class UserController {
         return ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
                 .map(authentication -> (OidcUser) authentication.getPrincipal())
-                .map(oidcUser -> new User(oidcUser.getPreferredUsername(), oidcUser.getGivenName(), oidcUser.getFamilyName(), oidcUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()));
+                .map(oidcUser -> new User(oidcUser.getPreferredUsername(), oidcUser.getGivenName(), oidcUser.getFamilyName(), oidcUser.getClaimAsStringList("roles")));
     }
 
     @GetMapping("/auto")
     public User getUser(@AuthenticationPrincipal OidcUser oidcUser) {
-        return new User(oidcUser.getPreferredUsername(), oidcUser.getGivenName(), oidcUser.getFamilyName(), oidcUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        return new User(oidcUser.getPreferredUsername(), oidcUser.getGivenName(), oidcUser.getFamilyName(), oidcUser.getClaimAsStringList("roles"));
     }
 }
