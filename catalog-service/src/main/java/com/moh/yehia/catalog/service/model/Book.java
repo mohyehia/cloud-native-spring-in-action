@@ -27,5 +27,5 @@ public record Book(
         @LastModifiedDate
         Instant lastModifiedDate,
         @Version
-        int version) {
+        Integer version) {
 }

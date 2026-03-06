@@ -10,6 +10,12 @@ spring:
       connection-timeout: 2000
       maximum-pool-size: 5
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/workshop}
+
 server:
   port: 9091
   tomcat:
