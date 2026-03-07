@@ -1,14 +1,16 @@
 package com.moh.yehia.catalog.service.controller;
 
-import com.moh.yehia.catalog.service.config.BasePostgresqlContainer;
 import com.moh.yehia.catalog.service.config.DataConfig;
+import com.moh.yehia.catalog.service.config.PlatformPrerequisiteContainers;
 import com.moh.yehia.catalog.service.model.Book;
 import com.moh.yehia.catalog.service.repository.BookRepository;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -25,7 +28,7 @@ import java.util.List;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(DataConfig.class)
-class BookControllerIntegrationTest extends BasePostgresqlContainer {
+class BookControllerIntegrationTest extends PlatformPrerequisiteContainers {
     @Autowired
     private MockMvc mockMvc;
 
@@ -35,6 +38,14 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
     @Autowired
     private ObjectMapper objectMapper;
 
+//    @BeforeAll
+//    static void generateAccessTokens() {
+//        // configure resttemplate for calling keycloak to generate access tokens for testing secured endpoints
+//        RestTemplate restTemplate = new RestTemplate();
+//        String tokenEndpoint = "http://localhost:8080/realms/PolarBookshop/protocol/openid-connect/token";
+////        String accessToken = restTemplate.postForObject(tokenEndpoint, "grant_type=client_credentials&client_id=" + clientId + "&client_secret=" + clientSecret, KeycloakTokenResponse.class).getAccessToken();
+//    }
+
     @AfterEach
     void cleanUp() {
         bookRepository.deleteAll();
@@ -43,8 +54,7 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
     @Test
     void givenListOfBooks_whenGetAllBooks_thenBooksAreReturned() throws Exception {
         var book = getDefaultBook();
-        bookRepository.save(book);
-
+        Book savedBook = bookRepository.save(book);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/books"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
@@ -168,4 +178,6 @@ class BookControllerIntegrationTest extends BasePostgresqlContainer {
     private @NotNull Book getDefaultBook() {
         return new Book(null, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
     }
+
+
 }
