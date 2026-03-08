@@ -14,6 +14,12 @@ spring:
     password: ${RABBIT_MQ_PASSWORD:password}
     connection-timeout: 5s
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/workshop}
+
   cloud:
     function:
       definition: dispatchOrder
