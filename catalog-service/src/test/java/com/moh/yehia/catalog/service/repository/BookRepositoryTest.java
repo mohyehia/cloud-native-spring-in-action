@@ -36,6 +36,8 @@ class BookRepositoryTest extends BasePostgresqlContainer {
         Assertions.assertThat(savedBook.author()).isEqualTo(book.author());
         Assertions.assertThat(savedBook.price()).isEqualTo(book.price());
         Assertions.assertThat(savedBook.version()).isGreaterThan(0);
+        Assertions.assertThat(savedBook.createdBy()).isNotNull().isEqualTo("test-user");
+        Assertions.assertThat(savedBook.lastModifiedBy()).isNotNull().isEqualTo("test-user");
         Assertions.assertThat(savedBook.createdDate()).isNotNull();
         Assertions.assertThat(savedBook.lastModifiedDate()).isNotNull();
     }
@@ -47,7 +49,16 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
-    @WithMockUser("test-user")
+    void givenUnauthenticatedUser_whenCreateBook_thenNoAuditMetadata() {
+        var book = getDefaultBook();
+        Book savedBook = bookRepository.save(book);
+        Assertions.assertThat(savedBook)
+                .isNotNull();
+        Assertions.assertThat(savedBook.createdBy()).isNull();
+        Assertions.assertThat(savedBook.lastModifiedBy()).isNull();
+    }
+
+    @Test
     void givenBooks_whenFindAll_thenReturnListOfBooks() {
         var book = getDefaultBook();
         bookRepository.save(book);
@@ -56,7 +67,6 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
-    @WithMockUser("test-user")
     void givenBook_whenFindByIsbn_thenReturnBook() {
         var book = getDefaultBook();
         bookRepository.save(book);
@@ -72,7 +82,6 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
-    @WithMockUser("test-user")
     void givenBook_whenExistsByIsbn_thenReturnBook() {
         var book = getDefaultBook();
         bookRepository.save(book);
@@ -87,7 +96,6 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
-    @WithMockUser("test-user")
     void givenExistingBook_whenDeleteByIsbn_thenBookIsDeleted() {
         var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
