@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @Import(DataConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -37,6 +38,7 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenListOfBooks_whenFindBooks_thenBooksAreReturned() {
         var book = getDefaultBook();
         bookRepository.save(book);
@@ -57,6 +59,7 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenExistingBook_whenFindByIsbn_thenBookIsReturned() {
         var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
@@ -75,6 +78,7 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenExistingBook_whenAddBook_thenBookAlreadyExistsExceptionIsThrown() {
         var book = getDefaultBook();
         bookService.addBook(book);
@@ -85,6 +89,7 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenNewBook_whenAddBook_thenBookIsCreated() {
         var book = getDefaultBook();
         Book savedBook = bookService.addBook(book);
@@ -102,6 +107,7 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenExistingBook_whenDeleteBook_thenBookIsDeleted() {
         var book = getDefaultBook();
         bookService.addBook(book);
@@ -112,6 +118,7 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenNonExistingBook_whenUpdateBook_thenNewBookIsAdded() {
         var book = getDefaultBook();
         Book savedBook = bookService.updateBook(book.isbn(), book);
@@ -129,11 +136,12 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenExistingBook_whenUpdateBook_thenBookIsUpdated() {
         var book = getDefaultBook();
         Book savedBook = bookService.addBook(book);
 
-        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.publisher(), savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.version());
+        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.publisher(), savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.createdBy(), savedBook.lastModifiedBy(), savedBook.version());
         Book retrievedBook = bookService.updateBook(book.isbn(), updatedBook);
 
         Assertions.assertThat(retrievedBook)
@@ -148,6 +156,6 @@ class BookServiceTest extends BasePostgresqlContainer {
     }
 
     private @NotNull Book getDefaultBook() {
-        return new Book(null, "1234567890", "Title", "Author", 9.90, "publisher", null, null, 0);
+        return new Book(null, "1234567890", "Title", "Author", 9.90, "publisher", null, null, "creator", "modifier", 0);
     }
 }

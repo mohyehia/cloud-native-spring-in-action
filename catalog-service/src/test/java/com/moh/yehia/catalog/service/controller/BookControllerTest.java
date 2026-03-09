@@ -43,7 +43,7 @@ class BookControllerTest {
     @Test
     void givenListOfBooks_whenGetAllBooks_thenBooksAreReturned() throws Exception {
         // given
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 1);
 
         //when
         BDDMockito.given(bookService.findBooks())
@@ -69,7 +69,7 @@ class BookControllerTest {
     @Test
     void givenBook_whenGetBookByIsbn_thenBookIsReturned() throws Exception {
         // given
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 1);
 
         // when
         BDDMockito.given(bookService.findByIsbn(ArgumentMatchers.anyString()))
@@ -102,8 +102,8 @@ class BookControllerTest {
     @Test
     void givenValidBook_whenAddBook_thenBookIsCreated() throws Exception {
         // given
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
-        var savedBook = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 1);
+        var savedBook = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 1);
 
         // when
         BDDMockito.given(bookService.addBook(ArgumentMatchers.any(Book.class))).willReturn(savedBook);
@@ -126,7 +126,7 @@ class BookControllerTest {
     @Test
     void givenBook_whenUpdateBook_thenUpdatedBookIsReturned() throws Exception {
         // given
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 1);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 1);
 
         // when
         BDDMockito.given(bookService.updateBook(ArgumentMatchers.eq("1234567890"), ArgumentMatchers.any(Book.class))).willReturn(book);
@@ -161,7 +161,7 @@ class BookControllerTest {
 
     @Test
     void givenCustomerRole_whenAddBook_thenForbidden() throws Exception {
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
         mockMvc.perform(MockMvcRequestBuilders.post("/books")
                         .with(SecurityMockMvcRequestPostProcessors.jwt().authorities(new SimpleGrantedAuthority("ROLE_customer")))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -172,7 +172,7 @@ class BookControllerTest {
 
     @Test
     void givenCustomerRole_whenUpdateBook_thenForbidden() throws Exception {
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
         mockMvc.perform(MockMvcRequestBuilders.put("/books/1234567890")
                         .with(SecurityMockMvcRequestPostProcessors.jwt().authorities(new SimpleGrantedAuthority("ROLE_customer")))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -191,7 +191,7 @@ class BookControllerTest {
 
     @Test
     void givenUnauthenticated_whenAddBook_thenUnauthorized() throws Exception {
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
         mockMvc.perform(MockMvcRequestBuilders.post("/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(book)))
@@ -201,7 +201,7 @@ class BookControllerTest {
 
     @Test
     void givenUnauthenticated_whenUpdateBook_thenUnauthorized() throws Exception {
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
         mockMvc.perform(MockMvcRequestBuilders.put("/books/1234567890")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(book)))

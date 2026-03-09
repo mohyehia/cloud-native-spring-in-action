@@ -17,7 +17,7 @@ class BookJsonTest {
 
     @Test
     void givenBook_whenSerialize_thenCorrect() throws IOException {
-        var book = new Book(null, "1234567890", "Title", "Author", 9.90, "publisher", Instant.now(), Instant.now(), 1);
+        var book = new Book(null, "1234567890", "Title", "Author", 9.90, "publisher", Instant.now(), Instant.now(), "test-user", "test-updated-user", 1);
         var jsonContent = bookJacksonTester.write(book);
         Assertions.assertThat(jsonContent).extractingJsonPathNumberValue("@.id").isEqualTo(book.id());
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.isbn").isEqualTo(book.isbn());
@@ -26,6 +26,8 @@ class BookJsonTest {
         Assertions.assertThat(jsonContent).extractingJsonPathNumberValue("@.price").isEqualTo(book.price());
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.publisher").isEqualTo(book.publisher());
         Assertions.assertThat(jsonContent).extractingJsonPathNumberValue("@.version").isEqualTo(book.version());
+        Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.createdBy").isEqualTo(book.createdBy());
+        Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.lastModifiedBy").isEqualTo(book.lastModifiedBy());
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.createdDate").isEqualTo(book.createdDate().toString());
         Assertions.assertThat(jsonContent).extractingJsonPathStringValue("@.lastModifiedDate").isEqualTo(book.lastModifiedDate().toString());
     }
@@ -39,11 +41,13 @@ class BookJsonTest {
                     "author": "Author",
                     "publisher": "publisher",
                     "price": 9.90,
+                    "createdBy": "creator",
+                    "lastModifiedBy": "modifier",
                     "version": 0
                 }
                 """;
         Assertions.assertThat(bookJacksonTester.parse(jsonContent))
                 .usingRecursiveComparison()
-                .isEqualTo(new Book(null, "1234567890", "Title", "Author", 9.90, "publisher", null, null, 0));
+                .isEqualTo(new Book(null, "1234567890", "Title", "Author", 9.90, "publisher", null, null, "creator", "modifier", 0));
     }
 }

@@ -106,11 +106,12 @@ class BookControllerIntegrationTest extends PlatformPrerequisiteContainers {
         Book returnedBookFromResponse = objectMapper.readValue(contentAsString, Book.class);
         Assertions.assertThat(returnedBookFromResponse)
                 .isNotNull();
-
         Assertions.assertThat(returnedBookFromResponse.id()).isNotNull();
         Assertions.assertThat(returnedBookFromResponse.isbn()).isNotNull();
         Assertions.assertThat(returnedBookFromResponse.createdDate()).isNotNull();
         Assertions.assertThat(returnedBookFromResponse.lastModifiedDate()).isNotNull();
+        Assertions.assertThat(returnedBookFromResponse.createdBy()).isNotNull();
+        Assertions.assertThat(returnedBookFromResponse.lastModifiedBy()).isNotNull();
         Assertions.assertThat(returnedBookFromResponse.version()).isGreaterThan(book.version());
     }
 
@@ -133,7 +134,7 @@ class BookControllerIntegrationTest extends PlatformPrerequisiteContainers {
         var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
 
-        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.publisher(), savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.version());
+        var updatedBook = new Book(savedBook.id(), savedBook.isbn(), "Title updated", "Author updated", 13.5, savedBook.publisher(), savedBook.createdDate(), savedBook.lastModifiedDate(), savedBook.createdBy(), savedBook.lastModifiedBy(), savedBook.version());
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put("/books/{isbn}", savedBook.isbn())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken.accessToken())
@@ -207,7 +208,7 @@ class BookControllerIntegrationTest extends PlatformPrerequisiteContainers {
 
     @Test
     void givenCustomerToken_whenUpdateBook_thenForbidden() throws Exception {
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
         mockMvc.perform(MockMvcRequestBuilders.put("/books/{isbn}", book.isbn())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + customerToken.accessToken())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -237,7 +238,7 @@ class BookControllerIntegrationTest extends PlatformPrerequisiteContainers {
 
     @Test
     void givenUnauthenticated_whenUpdateBook_thenUnauthorized() throws Exception {
-        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        var book = new Book(1L, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
         mockMvc.perform(MockMvcRequestBuilders.put("/books/{isbn}", book.isbn())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(book)))
@@ -253,7 +254,7 @@ class BookControllerIntegrationTest extends PlatformPrerequisiteContainers {
     }
 
     private @NotNull Book getDefaultBook() {
-        return new Book(null, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        return new Book(null, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
     }
 
     private static KeycloakToken authenticateWithKeycloak(String username, RestTemplate restTemplate) {

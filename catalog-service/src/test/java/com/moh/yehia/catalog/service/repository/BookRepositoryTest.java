@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jdbc.test.autoconfigure.DataJdbcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @DataJdbcTest
 @Import(DataConfig.class)
@@ -23,6 +24,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenBook_whenSaveBook_thenReturnSavedBook() {
         var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
@@ -45,6 +47,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenBooks_whenFindAll_thenReturnListOfBooks() {
         var book = getDefaultBook();
         bookRepository.save(book);
@@ -53,6 +56,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenBook_whenFindByIsbn_thenReturnBook() {
         var book = getDefaultBook();
         bookRepository.save(book);
@@ -68,6 +72,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenBook_whenExistsByIsbn_thenReturnBook() {
         var book = getDefaultBook();
         bookRepository.save(book);
@@ -82,6 +87,7 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenExistingBook_whenDeleteByIsbn_thenBookIsDeleted() {
         var book = getDefaultBook();
         Book savedBook = bookRepository.save(book);
@@ -93,6 +99,6 @@ class BookRepositoryTest extends BasePostgresqlContainer {
     }
 
     private @NotNull Book getDefaultBook() {
-        return new Book(null, "1234567890", "Title", "Author", 9.90, null, null, null, 0);
+        return new Book(null, "1234567890", "Title", "Author", 9.90, null, null, null, null, null, 0);
     }
 }
