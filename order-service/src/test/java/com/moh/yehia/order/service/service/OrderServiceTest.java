@@ -20,6 +20,7 @@ import org.springframework.cloud.stream.binder.test.TestChannelBinderConfigurati
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -55,18 +56,20 @@ class OrderServiceTest extends BaseMongoContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenEmptyListOfOrders_whenFindAllOrders_thenReturnEmptyList() {
-        var orders = orderService.findAllOrders();
+        var orders = orderService.findAllOrders("test-user");
         Assertions.assertThat(orders)
                 .isNotNull()
                 .isEmpty();
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenListOfOrders_whenFindAllOrders_thenOrdersAreReturned() {
         var order = getDefaultOrder();
         orderRepository.save(order);
-        var orders = orderService.findAllOrders();
+        var orders = orderService.findAllOrders("test-user");
         Assertions.assertThat(orders)
                 .isNotNull()
                 .isNotEmpty()
@@ -74,6 +77,7 @@ class OrderServiceTest extends BaseMongoContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenExistingBook_whenSubmitOrder_thenOrderIsAccepted() {
         var bookIsbn = "1234567890";
         var mockResponse = new MockResponse()
@@ -84,7 +88,7 @@ class OrderServiceTest extends BaseMongoContainer {
 
         orderService.submitOrder(bookIsbn, 2);
 
-        var orders = orderService.findAllOrders();
+        var orders = orderService.findAllOrders("test-user");
         Assertions.assertThat(orders)
                 .isNotNull()
                 .isNotEmpty()
@@ -99,6 +103,7 @@ class OrderServiceTest extends BaseMongoContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenNonExistingBook_whenSubmitOrder_thenOrderIsRejected() {
         var bookIsbn = "0987654321";
         var mockResponse = new MockResponse()
@@ -108,7 +113,7 @@ class OrderServiceTest extends BaseMongoContainer {
 
         orderService.submitOrder(bookIsbn, 2);
 
-        var orders = orderService.findAllOrders();
+        var orders = orderService.findAllOrders("test-user");
         Assertions.assertThat(orders)
                 .isNotNull()
                 .isNotEmpty()
@@ -126,6 +131,8 @@ class OrderServiceTest extends BaseMongoContainer {
                 19.95,
                 1,
                 OrderStatus.REJECTED,
+                null,
+                null,
                 null,
                 null,
                 0

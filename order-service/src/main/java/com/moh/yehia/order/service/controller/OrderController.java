@@ -4,6 +4,8 @@ import com.moh.yehia.order.service.model.Order;
 import com.moh.yehia.order.service.model.OrderRequest;
 import com.moh.yehia.order.service.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> getOrders() {
-        return orderService.findAllOrders();
+    public List<Order> getOrders(@AuthenticationPrincipal Jwt jwt) {
+        return orderService.findAllOrders(jwt.getSubject());
     }
 
     @PostMapping

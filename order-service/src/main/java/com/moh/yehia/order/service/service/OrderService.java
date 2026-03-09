@@ -31,8 +31,8 @@ public class OrderService {
         this.streamBridge = streamBridge;
     }
 
-    public List<Order> findAllOrders() {
-        return orderRepository.findAll();
+    public List<Order> findAllOrders(String userId) {
+        return orderRepository.findAllByCreatedBy(userId);
     }
 
     @Transactional
@@ -65,6 +65,8 @@ public class OrderService {
                 OrderStatus.REJECTED,
                 null,
                 null,
+                null,
+                null,
                 0
         );
     }
@@ -77,6 +79,8 @@ public class OrderService {
                 book.price(),
                 quantity,
                 OrderStatus.ACCEPTED,
+                null,
+                null,
                 null,
                 null,
                 0
@@ -109,6 +113,8 @@ public class OrderService {
                 OrderStatus.DISPATCHED,
                 order.createdDate(),
                 order.lastModifiedDate(),
+                order.createdBy(),
+                order.lastModifiedBy(),
                 order.version());
     }
 }

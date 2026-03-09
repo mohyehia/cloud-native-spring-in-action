@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 
 @Import(DataConfig.class)
 @DataMongoTest
@@ -22,6 +23,7 @@ class OrderRepositoryTest extends BaseMongoContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenOrder_whenSaveOrder_thenReturnSavedOrder() {
         var order = getDefaultOrder();
         Order savedOrder = orderRepository.save(order);
@@ -35,6 +37,18 @@ class OrderRepositoryTest extends BaseMongoContainer {
         Assertions.assertThat(savedOrder.version()).isGreaterThan(0);
         Assertions.assertThat(savedOrder.createdDate()).isNotNull();
         Assertions.assertThat(savedOrder.lastModifiedDate()).isNotNull();
+        Assertions.assertThat(savedOrder.createdBy()).isNotNull().isEqualTo("test-user");
+        Assertions.assertThat(savedOrder.lastModifiedBy()).isNotNull().isEqualTo("test-user");
+    }
+
+    @Test
+    void givenUnauthenticatedUser_whenCreateOrder_thenNoAuditMetadata() {
+        var order = getDefaultOrder();
+        Order savedOrder = orderRepository.save(order);
+        Assertions.assertThat(savedOrder)
+                .isNotNull();
+        Assertions.assertThat(savedOrder.createdBy()).isNull();
+        Assertions.assertThat(savedOrder.lastModifiedBy()).isNull();
     }
 
     @Test
@@ -44,6 +58,7 @@ class OrderRepositoryTest extends BaseMongoContainer {
     }
 
     @Test
+    @WithMockUser("test-user")
     void givenOrders_whenFindAll_thenReturnListOfOrders() {
         var order = getDefaultOrder();
         orderRepository.save(order);
@@ -58,6 +73,8 @@ class OrderRepositoryTest extends BaseMongoContainer {
                 "Sample Book",
                 19.99,
                 1,
+                null,
+                null,
                 null,
                 null,
                 null,

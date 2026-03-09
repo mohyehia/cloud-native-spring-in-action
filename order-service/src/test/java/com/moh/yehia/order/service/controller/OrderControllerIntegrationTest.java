@@ -210,6 +210,8 @@ class OrderControllerIntegrationTest extends PlatformPrerequisiteContainers {
                 OrderStatus.ACCEPTED,
                 null,
                 null,
+                "e28b0395-6c30-4e47-88e3-9b447bfb7267",
+                "e28b0395-6c30-4e47-88e3-9b447bfb7267",
                 0
         );
     }

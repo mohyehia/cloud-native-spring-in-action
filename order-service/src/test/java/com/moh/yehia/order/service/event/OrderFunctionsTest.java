@@ -50,6 +50,8 @@ class OrderFunctionsTest extends BaseMongoContainer {
                 null,
                 null,
                 null,
+                null,
+                null,
                 0
         );
     }
