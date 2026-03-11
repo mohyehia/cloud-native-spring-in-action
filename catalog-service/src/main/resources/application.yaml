@@ -16,6 +16,31 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/workshop}
 
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-components: always
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  otlp:
+    metrics:
+      export:
+        url: http://${OTEL_LGTM:localhost}:4318/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/traces
+    logging:
+      export:
+        otlp:
+          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/logs
+
 server:
   port: 9091
   tomcat:

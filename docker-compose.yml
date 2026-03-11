@@ -104,4 +104,12 @@ services:
     environment:
       PORT: 9004
 
-
+  otel-lgtm:
+    image: grafana/otel-lgtm:latest
+    container_name: otel-lgtm
+    ports:
+      - "3000:3000" # Grafana UI
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+      - "9090:9090" # Prometheus metrics
+      - "4040:4040" # Pyroscope

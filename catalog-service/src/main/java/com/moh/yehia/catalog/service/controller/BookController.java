@@ -3,6 +3,8 @@ package com.moh.yehia.catalog.service.controller;
 import com.moh.yehia.catalog.service.model.Book;
 import com.moh.yehia.catalog.service.service.BookService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,8 @@ import java.util.List;
 @RequestMapping("books")
 public class BookController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
+
     private final BookService bookService;
 
     public BookController(BookService bookService) {
@@ -20,11 +24,13 @@ public class BookController {
 
     @GetMapping
     public List<Book> getAllBooks() {
+        LOGGER.info("BookController :: getAllBooks :: Start");
         return bookService.findBooks();
     }
 
     @GetMapping("/{isbn}")
     public Book getBookByIsbn(@PathVariable String isbn) {
+        LOGGER.info("BookController :: getBookByIsbn :: Start :: ISBN: {}", isbn);
         return bookService.findByIsbn(isbn);
     }
 
