@@ -20,6 +20,12 @@ GET http://localhost:9091/books/0098765432
 Content-Type: application/json
 
 
+### catalog-service prometheus metrics
+GET http://localhost:9091/actuator/prometheus
+
+### download heapdump
+GET http://localhost:9091/actuator/heapdump
+
 ### get orders
 GET http://localhost:9092/orders
 Content-Type: application/json

@@ -113,3 +113,15 @@ services:
       - "4318:4318" # OTLP HTTP
       - "9090:9090" # Prometheus metrics
       - "4040:4040" # Pyroscope
+    volumes:
+      # Grafana dashboards and users
+      - ./docker/volumes/grafana:/var/lib/grafana
+      # Prometheus metrics
+      - ./docker/volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      # Loki logs
+      - ./docker/volumes/loki:/loki
+      # Tempo traces
+      - ./docker/volumes/tempo:/tmp/tempo
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin

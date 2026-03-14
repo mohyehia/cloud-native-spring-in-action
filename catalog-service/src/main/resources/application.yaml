@@ -23,23 +23,43 @@ management:
         enabled: true
       show-components: always
       show-details: always
+    heapdump:
+      access: read_only
   endpoints:
     web:
       exposure:
-        include: health, info, prometheus, metrics
-  otlp:
-    metrics:
-      export:
-        url: http://${OTEL_LGTM:localhost}:4318/v1/metrics
-  opentelemetry:
-    tracing:
-      export:
-        otlp:
-          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/traces
-    logging:
-      export:
-        otlp:
-          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/logs
+        include: health, info, prometheus, metrics, flyway, heapdump, threaddump
+#  otlp:
+#    metrics:
+#      export:
+#        url: http://${OTEL_LGTM:localhost}:4318/v1/metrics
+#  opentelemetry:
+#    tracing:
+#      export:
+#        otlp:
+#          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/traces
+#    logging:
+#      export:
+#        otlp:
+#          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/logs
+  tracing:
+    sampling:
+      probability: 1.0
+
+  metrics:
+    tags:
+        application: ${spring.application.name}
+
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+    build:
+      enabled: true
+
 
 server:
   port: 9091
