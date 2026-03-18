@@ -3,6 +3,7 @@ services:
     depends_on:
       - postgres-db
       - fluent-bit
+      - tempo
     container_name: catalog-service
     image: catalog-service
     ports:
@@ -110,27 +111,27 @@ services:
     environment:
       PORT: 9004
 
-  otel-lgtm:
-    image: grafana/otel-lgtm:latest
-    container_name: otel-lgtm
-    ports:
-      - "3000:3000" # Grafana UI
-      - "4317:4317" # OTLP gRPC
-      - "4318:4318" # OTLP HTTP
-      - "9090:9090" # Prometheus metrics
-      - "4040:4040" # Pyroscope
-    volumes:
-      # Grafana dashboards and users
-      - ./docker/volumes/grafana:/var/lib/grafana
-      # Prometheus metrics
-      - ./docker/volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      # Loki logs
-      - ./docker/volumes/loki:/loki
-      # Tempo traces
-      - ./docker/volumes/tempo:/tmp/tempo
-    environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
+#  otel-lgtm:
+#    image: grafana/otel-lgtm:latest
+#    container_name: otel-lgtm
+#    ports:
+#      - "3000:3000" # Grafana UI
+#      - "4317:4317" # OTLP gRPC
+#      - "4318:4318" # OTLP HTTP
+#      - "9090:9090" # Prometheus metrics
+#      - "4040:4040" # Pyroscope
+#    volumes:
+#      # Grafana dashboards and users
+#      - ./docker/volumes/grafana:/var/lib/grafana
+#      # Prometheus metrics
+#      - ./docker/volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#      # Loki logs
+#      - ./docker/volumes/loki:/loki
+#      # Tempo traces
+#      - ./docker/volumes/tempo:/tmp/tempo
+#    environment:
+#      GF_SECURITY_ADMIN_USER: admin
+#      GF_SECURITY_ADMIN_PASSWORD: admin
 
   prometheus:
     image: prom/prometheus:v2.51.2
@@ -147,16 +148,24 @@ services:
       - ./docker/volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
   #      - ./docker/volumes/prometheus/alerting-rules.yml:/etc/prometheus/alerting-rules.yml
 
+
+# sudo chown -R 472:472 ./grafana_data to give grafana user permissions to read/write the data
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
     restart: unless-stopped
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
     ports:
       - '3000:3000'
     user: "472"
     volumes:
-      - ./docker/volumes/grafana/data:/var/lib/grafana
-    #      - ./docker/volumes/grafana/provisioning/datasources/:/etc/grafana/provisioning/datasources/
+      - ./docker/volumes/grafana/datasources/:/etc/grafana/provisioning/datasources/
+      - ./docker/volumes/grafana/dashboards/:/etc/grafana/provisioning/dashboards/
+      - ./docker/volumes/grafana/grafana.ini:/etc/grafana/grafana.ini
+#      - ./docker/volumes/grafana/data:/var/lib/grafana
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
