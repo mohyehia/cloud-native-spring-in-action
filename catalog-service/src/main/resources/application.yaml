@@ -29,22 +29,24 @@ management:
     web:
       exposure:
         include: health, info, prometheus, metrics, flyway, heapdump, threaddump
-#  otlp:
-#    metrics:
-#      export:
-#        url: http://${OTEL_LGTM:localhost}:4318/v1/metrics
-#  opentelemetry:
-#    tracing:
-#      export:
-#        otlp:
-#          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/traces
-#    logging:
-#      export:
-#        otlp:
-#          endpoint: http://${OTEL_LGTM:localhost}:4318/v1/logs
   tracing:
     sampling:
       probability: 1.0
+    export:
+      enabled: true
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4317
+    resource-attributes:
+        service.name: ${spring.application.name}
+
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
 
   metrics:
     tags:

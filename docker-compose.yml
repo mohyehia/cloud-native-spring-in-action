@@ -2,6 +2,7 @@ services:
   catalog-service:
     depends_on:
       - postgres-db
+      - fluent-bit
     container_name: catalog-service
     image: catalog-service
     ports:
@@ -9,6 +10,11 @@ services:
     environment:
       BPL_JVM_THREAD_COUNT: 50
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/catalog_service
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
 
   postgres-db:
     container_name: postgres-ctr
@@ -125,3 +131,64 @@ services:
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
+
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - '9090:9090'
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+#      - --web.enable-remote-write-receiver
+    volumes:
+      - ./docker/volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #      - ./docker/volumes/prometheus/alerting-rules.yml:/etc/prometheus/alerting-rules.yml
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    user: "472"
+    volumes:
+      - ./docker/volumes/grafana/data:/var/lib/grafana
+    #      - ./docker/volumes/grafana/provisioning/datasources/:/etc/grafana/provisioning/datasources/
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+
+  fluent-bit:
+    image: grafana/fluent-bit-plugin-loki:3.5.12
+    container_name: fluent-bit
+    restart: unless-stopped
+    ports:
+      - '24224:24224'
+    volumes:
+      - ./docker/volumes/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    environment:
+      LOKI_URL: http://loki:3100/loki/api/v1/push
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - '3100:3100'
+    depends_on:
+      - fluent-bit
+
+  tempo:
+    image: grafana/tempo:2.3.0
+    container_name: tempo
+    command: [ "-config.file=/etc/tempo.yml" ]
+    ports:
+      - '3200:3200'   # tempo
+      - '9411:9411'  # zipkin
+      - '4317:4317'  # OTLP gRPC
+      - '4318:4318'  # OTLP HTTP
+    volumes:
+      - ./docker/volumes/tempo-config/tempo.yml:/etc/tempo.yml
