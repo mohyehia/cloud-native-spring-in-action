@@ -16,6 +16,10 @@ datasources:
     isDefault: false
     version: 1
     editable: true
+    jsonData:
+      exemplarTraceIdDestinations:
+        - datasourceUid: tempo-cn
+          name: traceID
 
   - name: Tempo
     type: tempo

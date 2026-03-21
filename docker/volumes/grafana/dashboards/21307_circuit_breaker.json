@@ -55,7 +55,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "prometheus-cn"
       },
       "fieldConfig": {
         "defaults": {
@@ -136,7 +136,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "prometheus-cn"
           },
           "editorMode": "code",
           "expr": "resilience4j_circuitbreaker_state{application=\"$application\", cluster=~\"$cluster\", instance=~\"$instance\", name=\"$circuit_name\", state=\"open\"}",
@@ -152,7 +152,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "prometheus-cn"
       },
       "fieldConfig": {
         "defaults": {
@@ -233,7 +233,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "prometheus-cn"
           },
           "editorMode": "code",
           "expr": "resilience4j_circuitbreaker_calls_seconds_max{application=\"$application\", cluster=~\"$cluster\", instance=~\"$instance\", name=\"$circuit_name\"}",
@@ -249,7 +249,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "prometheus-cn"
       },
       "fieldConfig": {
         "defaults": {
@@ -330,7 +330,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "prometheus-cn"
           },
           "editorMode": "code",
           "expr": "resilience4j_circuitbreaker_failure_rate{application=\"$application\", cluster=~\"$cluster\", instance=~\"$instance\", name=\"$circuit_name\"}",
@@ -346,7 +346,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "prometheus-cn"
       },
       "fieldConfig": {
         "defaults": {
@@ -427,7 +427,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "prometheus-cn"
           },
           "editorMode": "code",
           "expr": "resilience4j_circuitbreaker_slow_calls{application=\"$application\", cluster=~\"$cluster\", instance=~\"$instance\", name=\"$circuit_name\"}",
@@ -443,7 +443,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "prometheus-cn"
       },
       "fieldConfig": {
         "defaults": {
@@ -523,7 +523,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "prometheus-cn"
           },
           "editorMode": "code",
           "expr": "delta(resilience4j_circuitbreaker_calls_seconds_count{application=\"$application\", cluster=~\"$cluster\", instance=~\"$instance\", name=\"$circuit_name\", kind=\"failed\"}[1m])",
@@ -539,7 +539,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS-PROMETHEUS}"
+        "uid": "prometheus-cn"
       },
       "fieldConfig": {
         "defaults": {
@@ -619,7 +619,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS-PROMETHEUS}"
+            "uid": "prometheus-cn"
           },
           "editorMode": "code",
           "expr": "delta(resilience4j_circuitbreaker_calls_seconds_count{application=\"$application\", cluster=~\"$cluster\", instance=~\"$instance\", name=\"$circuit_name\", kind=\"ignored\"}[1m])",
@@ -641,7 +641,7 @@
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS-PROMETHEUS}"
+          "uid": "prometheus-cn"
         },
         "definition": "label_values(resilience4j_circuitbreaker_calls_seconds_count,application)",
         "description": "Application",
@@ -667,7 +667,7 @@
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS-PROMETHEUS}"
+          "uid": "prometheus-cn"
         },
         "definition": "label_values(resilience4j_circuitbreaker_calls_seconds_count{application=\"$application\"},cluster)",
         "description": "Cluster",
@@ -693,7 +693,7 @@
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS-PROMETHEUS}"
+          "uid": "prometheus-cn"
         },
         "definition": "label_values(resilience4j_circuitbreaker_calls_seconds_count{application=~\"$application\", cluster=~\"$cluster\"},instance)",
         "description": "Instance",
@@ -718,7 +718,7 @@
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS-PROMETHEUS}"
+          "uid": "prometheus-cn"
         },
         "definition": "label_values(resilience4j_circuitbreaker_calls_seconds_count{application=\"$application\", cluster=~\"$cluster\", instance=~\"$instance\"}, name)",
         "description": "circuit_name",

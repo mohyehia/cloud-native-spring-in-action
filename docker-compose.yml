@@ -12,7 +12,7 @@ services:
       BPL_JVM_THREAD_COUNT: 50
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/catalog_service
       MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
-      KEYCLOAK_ISSUER_URI: http://keycloak:8180/realms/workshop
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/workshop
     logging:
       driver: fluentd
       options:
@@ -49,7 +49,7 @@ services:
       SPRING_RABBITMQ_USERNAME: user
       SPRING_RABBITMQ_PASSWORD: password
       MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
-      KEYCLOAK_ISSUER_URI: http://keycloak:8180/realms/workshop
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/workshop
     logging:
       driver: fluentd
       options:
@@ -102,7 +102,7 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       BPL_JVM_THREAD_COUNT: 50
       MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://tempo:4318/v1/traces
-      KEYCLOAK_ISSUER_URI: http://keycloak:8180/realms/workshop
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/workshop
     logging:
       driver: fluentd
       options:
