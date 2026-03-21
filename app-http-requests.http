@@ -72,3 +72,7 @@ Content-Type: application/json
   "isbn": "0098765777",
   "quantity": 3
 }
+
+
+### query prometheus
+GET http://localhost:9090/api/v1/query_exemplars?query=traces_spanmetrics_latency_bucket

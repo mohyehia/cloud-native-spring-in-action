@@ -25,7 +25,9 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity, ReactiveClientRegistrationRepository clientRegistrationRepository) {
         return httpSecurity
                 .authorizeExchange(authorizeExchangeSpec ->
-                        authorizeExchangeSpec.pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
+                        authorizeExchangeSpec
+                                .pathMatchers("/actuator/**").permitAll()
+                                .pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
                                 .pathMatchers(HttpMethod.GET, "/books/**").permitAll()
                                 .anyExchange().authenticated())
                 .exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec.authenticationEntryPoint(

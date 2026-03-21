@@ -13,20 +13,18 @@ storage:
     local:
       path: /tmp/tempo/blocks
 
-#metrics_generator:
-#  registry:
-#    external_labels:
-#      source: tempo
-#  storage:
-#    path: /tmp/tempo/generator/wal
-#    remote_write:
-#    - url: http://prometheus:9090/api/v1/write
-#      send_exemplars: true
-#
-#overrides:
-#  defaults:
-#    metrics_generator:
-#      processors: [service-graphs, span-metrics]
+metrics_generator:
+  registry:
+    external_labels:
+      source: tempo  # Adds a label to all generated metrics
+  storage:
+    path: /var/tempo/generator/wal  # Local storage for metrics before sending
+    remote_write:
+      - url: "http://prometheus:9090/api/v1/write"
+        send_exemplars: true  # Recommended: allows clicking a graph to see the trace
 
-usage_report:
-  reporting_enabled: false
+# You must also explicitly enable the processors in the overrides section
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [service-graphs, span-metrics]
