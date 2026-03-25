@@ -8,7 +8,7 @@ deleteDatasources:
 datasources:
   - name: Prometheus
     type: prometheus
-    uid: prometheus-cn
+    uid: prometheus
     access: proxy
     orgId: 1
     url: http://prometheus:9090
@@ -18,12 +18,12 @@ datasources:
     editable: true
     jsonData:
       exemplarTraceIdDestinations:
-        - datasourceUid: tempo-cn
+        - datasourceUid: tempo
           name: traceID
 
   - name: Tempo
     type: tempo
-    uid: tempo-cn
+    uid: tempo
     access: proxy
     orgId: 1
     url: http://tempo:3200
@@ -34,7 +34,7 @@ datasources:
     jsonData:
       httpMethod: GET
       tracesToLogs:
-        datasourceUid: 'loki-cn'
+        datasourceUid: 'loki'
         tags: [ 'instance', 'pod', 'namespace', 'hostname' ]
         mappedTags: [ { key: 'service.name', value: 'container_name' }  ]
         mapTagNamesEnabled: true
@@ -44,9 +44,9 @@ datasources:
         filterBySpanID: false
         lokiSearch: true
       lokiSearch:
-        datasourceUid: 'loki-cn'
+        datasourceUid: 'loki'
       serviceMap:
-        datasourceUid: 'prometheus-cn'
+        datasourceUid: 'prometheus'
       search:
         hide: false
       nodeGraph:
@@ -54,7 +54,7 @@ datasources:
 
   - name: Loki
     type: loki
-    uid: loki-cn
+    uid: loki
     access: proxy
     orgId: 1
     url: http://loki:3100
@@ -64,7 +64,7 @@ datasources:
     editable: true
     jsonData:
       derivedFields:
-        - datasourceUid: tempo-cn
+        - datasourceUid: tempo
           matcherRegex: \[.+,(.+?),
           name: TraceID
           url: $${__value.raw}
