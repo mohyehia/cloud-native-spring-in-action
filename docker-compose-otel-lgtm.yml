@@ -178,7 +178,6 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       # Crucial: Enables Prometheus to receive metrics from Tempo
       - PROMETHEUS_ARGS=--web.enable-remote-write-receiver --enable-feature=exemplar-storage
-      - OTEL_EXPORTER_OTLP_METRICS_DEFAULT_HISTOGRAM_AGGREGATION=explicit_bucket_histogram
     volumes:
       # Grafana provisioning
       - ./docker/volumes-otel/grafana/dashboards/dashboards-provisioning.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/custom.yaml:ro
