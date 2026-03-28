@@ -1,16 +1,19 @@
 package com.moh.yehia.catalog.service.model;
 
+import com.moh.yehia.catalog.service.config.ObjectMapperConfig;
 import org.assertj.core.api.Assertions;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
 import java.time.Instant;
 
 @JsonTest
+@Import(ObjectMapperConfig.class)
 class BookJsonTest {
     @Autowired
     private JacksonTester<@NonNull Book> bookJacksonTester;
@@ -42,8 +45,7 @@ class BookJsonTest {
                     "publisher": "publisher",
                     "price": 9.90,
                     "createdBy": "creator",
-                    "lastModifiedBy": "modifier",
-                    "version": 0
+                    "lastModifiedBy": "modifier"
                 }
                 """;
         Assertions.assertThat(bookJacksonTester.parse(jsonContent))
