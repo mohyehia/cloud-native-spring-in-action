@@ -1,69 +1,90 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway-ingress
+  namespace: dev
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api-gateway.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 80
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: catalog-service
+  name: api-gateway
   namespace: dev
 spec:
   selector:
-    app: catalog-service
+    app: api-gateway
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 9091
+      targetPort: 9001
   type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: catalog-service
+  name: api-gateway
   namespace: dev
   labels:
-    app: catalog-service
+    app: api-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: catalog-service
+      app: api-gateway
   template:
     metadata:
-      name: catalog-service
+      name: api-gateway
       labels:
-        app: catalog-service
+        app: api-gateway
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/actuator/prometheus"
-        prometheus.io/port: "9091"
+        prometheus.io/port: "9001"
     spec:
       containers:
-        - name: catalog-service
-          image: catalog-service
+        - name: api-gateway
+          image: api-gateway
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9091
+            - containerPort: 9001
               protocol: TCP
           env:
+            - name: CATALOG_SERVICE_URL
+              value: http://catalog-service
+            - name: ORDER_SERVICE_URL
+              value: http://order-service
+            - name: SPA_URL
+              value: http://polar-ui
             - name: BPL_JVM_THREAD_COUNT
               value: "50"
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 9091
+              port: 9001
             initialDelaySeconds: 30
-            periodSeconds: 10
+            periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 9091
-            initialDelaySeconds: 20
+              port: 9001
+            initialDelaySeconds: 10
             periodSeconds: 15
           lifecycle:
             preStop:
               exec:
                 command: ["sh", "-c", "sleep 5"]
-          volumeMounts:
-            - mountPath: /workspace/config
-              name: catalog-service-config
-              readOnly: true
           resources:
             limits:
               memory: "512Mi"
@@ -72,10 +93,14 @@ spec:
               memory: "256Mi"
               cpu: "100m"
               ephemeral-storage: "50Mi"
+          volumeMounts:
+            - mountPath: /workspace/config
+              name: api-gateway-config
+              readOnly: true
       automountServiceAccountToken: false
       restartPolicy: Always
 
       volumes:
-        - name: catalog-service-config
+        - name: api-gateway-config
           configMap:
-            name: catalog-service-config
+            name: api-gateway-config

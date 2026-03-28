@@ -29,6 +29,10 @@ spec:
       name: order-service
       labels:
         app: order-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "9092"
     spec:
       containers:
         - name: order-service
@@ -38,22 +42,40 @@ spec:
             - containerPort: 9092
               protocol: TCP
           env:
-            - name: SPRING_MONGODB_URI
-              value: mongodb://mongo-db:27017/order_service
-            - name: CATALOG-SERVICE_URL
-              value: http://catalog-service/books
-            - name: SPRING_MONGODB_USERNAME
-              value: order_service
-            - name: SPRING_MONGODB_PASSWORD
-              value: P@ssw0rd
             - name: BPL_JVM_THREAD_COUNT
               value: "50"
-            - name: SERVER_SHUTDOWN
-              value: "graceful"
-            - name: SPRING_LIFECYCLE_TIMEOUT_PER_SHUTDOWN_PHASE
-              value: "15s"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 9092
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9092
+            initialDelaySeconds: 20
+            periodSeconds: 15
           lifecycle:
             preStop:
               exec:
-                command: ["sh", "-c", "sleep 10"]
+                command: ["sh", "-c", "sleep 5"]
+          volumeMounts:
+            - mountPath: /workspace/config
+              name: order-service-config
+              readOnly: true
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+              ephemeral-storage: "50Mi"
+      automountServiceAccountToken: false
       restartPolicy: Always
+
+      volumes:
+        - name: order-service-config
+          configMap:
+            name: order-service-config

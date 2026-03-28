@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-service-config
+  namespace: dev
+  labels:
+    app: catalog-service
+data:
+  application.yml: |
+    spring:
+      datasource:
+        url: jdbc:postgresql://postgres-db:5432/catalog_service
+        username: catalog_service
+        password: P@ssw0rd
+      lifecycle:
+        timeout-per-shutdown-phase: 15s
+      security:
+        oauth2:
+          resourceserver:
+            jwt:
+              issuer-uri: http://workshop.keycloak/realms/workshop
+    server:
+      shutdown: graceful
+    management:
+      opentelemetry:
+        tracing:
+          export:
+            otlp:
+              endpoint: http://otel-lgtm:4318/v1/traces

@@ -1,59 +1,56 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: catalog-service
+  name: dispatcher-service
   namespace: dev
 spec:
   selector:
-    app: catalog-service
+    app: dispatcher-service
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 9091
+      targetPort: 9003
   type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: catalog-service
+  name: dispatcher-service
   namespace: dev
   labels:
-    app: catalog-service
+    app: dispatcher-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: catalog-service
+      app: dispatcher-service
   template:
     metadata:
-      name: catalog-service
+      name: dispatcher-service
       labels:
-        app: catalog-service
+        app: dispatcher-service
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/actuator/prometheus"
-        prometheus.io/port: "9091"
+        prometheus.io/port: "9003"
     spec:
       containers:
-        - name: catalog-service
-          image: catalog-service
+        - name: dispatcher-service
+          image: dispatcher-service
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9091
+            - containerPort: 9003
               protocol: TCP
-          env:
-            - name: BPL_JVM_THREAD_COUNT
-              value: "50"
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 9091
+              port: 9003
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 9091
+              port: 9003
             initialDelaySeconds: 20
             periodSeconds: 15
           lifecycle:
@@ -62,7 +59,7 @@ spec:
                 command: ["sh", "-c", "sleep 5"]
           volumeMounts:
             - mountPath: /workspace/config
-              name: catalog-service-config
+              name: dispatcher-service-config
               readOnly: true
           resources:
             limits:
@@ -76,6 +73,6 @@ spec:
       restartPolicy: Always
 
       volumes:
-        - name: catalog-service-config
+        - name: dispatcher-service-config
           configMap:
-            name: catalog-service-config
+            name: dispatcher-service-config
