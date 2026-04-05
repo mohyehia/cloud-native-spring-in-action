@@ -1,0 +1,5 @@
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/catalog_service

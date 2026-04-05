@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: staging
+
+resources:
+  - ../../base
+
+configMapGenerator:
+  - behavior: merge
+    files:
+      - application-staging.yaml
+    name: catalog-service-config
+
+images:
+  - name: catalog-service
+    newName: catalog-service
+    newTag: latest
+replicas:
+  - count: 2
+    name: catalog-service # the name of the deployment for which to define the number of replicas
+
+patches:
+  - path: patch-env-staging.yaml
+    target:
+      kind: Deployment
+      name: catalog-service
+
+#patches:
+#  - target:
+#      kind: Deployment
+#      name: catalog-service
+#    patch: |-
+#      - op: add
+#        path: /spec/template/spec/containers/0/env
+#        value:
+#          - name: SPRING_PROFILES_ACTIVE
+#            value: "staging"
