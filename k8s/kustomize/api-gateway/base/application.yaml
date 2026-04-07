@@ -1,0 +1,24 @@
+spring:
+  data:
+    redis:
+      host: redis
+      port: 6379
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-secret: xPiqnN3uuuenxwOFXMHWEX2oy4gSbOmt
+        provider:
+          keycloak:
+            issuer-uri: http://workshop.keycloak/realms/workshop
+server:
+  shutdown: graceful
+management:
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel-lgtm:4318/v1/traces

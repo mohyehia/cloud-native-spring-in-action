@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: dev
+
+resources:
+  - ../../base
+
+configMapGenerator:
+  - name: api-gateway-config
+    behavior: merge
+    files:
+      - application-dev.yaml
+
+images:
+  - name: api-gateway
+    newName: api-gateway
+    newTag: latest
+
+patches:
+  - path: patch-env-dev.yaml
+    target:
+      kind: Deployment
+      name: api-gateway
+  - path: dev-ingress-patch.yaml
+    target:
+      kind: Ingress
+      name: api-gateway-ingress
