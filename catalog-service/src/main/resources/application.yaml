@@ -51,6 +51,9 @@ management:
   metrics:
     tags:
         application: ${spring.application.name}
+        node: ${KUBERNETES_Node:${random.long}}
+        namespace: ${KUBERNETES_NAMESPACE:default}
+        instance.id: ${KUBERNETES_POD_NAME:${random.long}}
 
   info:
     env:
