@@ -1,0 +1,27 @@
+spring:
+  mongodb:
+    uri: mongodb://mongo-db:27017/order_service
+    username: order_service
+    password: P@ssw0rd
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: password
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://workshop.keycloak/realms/workshop
+server:
+  shutdown: graceful
+catalog-service:
+  url: http://catalog-service/books
+management:
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel-lgtm:4318/v1/traces
