@@ -1,0 +1,16 @@
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: password
+server:
+  shutdown: graceful
+management:
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel-lgtm:4318/v1/traces
