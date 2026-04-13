@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../postgres/overlays/dev
+  - ../mongo/overlays/dev
+  - ../redis/overlays/dev
+  - ../rabbitmq/overlays/dev
+  - ../keycloak/overlays/dev
