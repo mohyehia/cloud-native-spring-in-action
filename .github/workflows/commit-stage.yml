@@ -53,6 +53,11 @@ jobs:
           manifests: |
             catalog-service/k8s/base/catalog-service.yaml
           kubeconformOpts: -summary
+      - name: Kustomize Build
+        uses: karancode/kustomize-github-action@master
+        with:
+          kustomize_version: '3.0.0'
+          kustomize_build_dir: 'catalog-service/k8s/base'
   package:
     name: Package and Publish
     if: ${{github.ref == 'refs/heads/main'}}
